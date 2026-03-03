@@ -19,7 +19,6 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/property-view")
 @Tag(name = "Hotel Management", description = "Endpoints for managing hotels")
 public class HotelController {
 
@@ -176,9 +175,9 @@ public class HotelController {
             @RequestBody List<String> amenities
     ){
         log.info("Call method addAmenities");
-
+        hotelService.addAmenities(id,amenities);
         return ResponseEntity.status(HttpStatus.OK)
-                .body(hotelService.addAmenities(id,amenities));
+                .build();
     }
 
     @GetMapping("/histogram/{param}")

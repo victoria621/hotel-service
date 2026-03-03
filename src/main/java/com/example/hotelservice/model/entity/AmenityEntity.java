@@ -25,4 +25,8 @@ public class AmenityEntity {
 
     @ManyToMany(mappedBy = "amenities")
     private List<HotelEntity> hotels = new ArrayList<>();
+
+    public AmenityEntity(String name) {
+        this.name = name;
+    }
 }

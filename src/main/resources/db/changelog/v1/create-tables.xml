@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+
+    <changeSet id="1" author="system">
+        <!-- Addresses table -->
+        <createTable tableName="addresses">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="house_number" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="street" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="city" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="country" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="post_code" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <!-- Contacts table -->
+        <createTable tableName="contacts">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="phone" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="email" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <!-- Arrival times table -->
+        <createTable tableName="arrival_times">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="check_in" type="VARCHAR(10)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="check_out" type="VARCHAR(10)"/>
+        </createTable>
+
+        <!-- Hotels table -->
+        <createTable tableName="hotels">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="VARCHAR(2000)"/>
+            <column name="brand" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="address_id" type="BIGINT">
+                <constraints nullable="false" foreignKeyName="fk_hotel_address" references="addresses(id)"/>
+            </column>
+            <column name="contacts_id" type="BIGINT">
+                <constraints nullable="false" foreignKeyName="fk_hotel_contacts" references="contacts(id)"/>
+            </column>
+            <column name="arrival_time_id" type="BIGINT">
+                <constraints foreignKeyName="fk_hotel_arrival" references="arrival_times(id)"/>
+            </column>
+        </createTable>
+
+        <!-- Amenities table -->
+        <createTable tableName="amenities">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+        </createTable>
+
+        <!-- Hotel amenities junction table -->
+        <createTable tableName="hotel_amenities">
+            <column name="hotel_id" type="BIGINT">
+                <constraints nullable="false" foreignKeyName="fk_ha_hotel" references="hotels(id)"/>
+            </column>
+            <column name="amenity_id" type="BIGINT">
+                <constraints nullable="false" foreignKeyName="fk_ha_amenity" references="amenities(id)"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey tableName="hotel_amenities" columnNames="hotel_id, amenity_id"/>
+    </changeSet>
+
+    <changeSet id="2" author="system">
+        <!-- Insert sample data -->
+        <insert tableName="addresses">
+            <column name="id" value="1"/>
+            <column name="house_number" value="9"/>
+            <column name="street" value="Pobediteley Avenue"/>
+            <column name="city" value="Minsk"/>
+            <column name="country" value="Belarus"/>
+            <column name="post_code" value="220004"/>
+        </insert>
+
+        <insert tableName="contacts">
+            <column name="id" value="1"/>
+            <column name="phone" value="+375 17 309-80-00"/>
+            <column name="email" value="doubletreeminsk.info@hilton.com"/>
+        </insert>
+
+        <insert tableName="arrival_times">
+            <column name="id" value="1"/>
+            <column name="check_in" value="14:00"/>
+            <column name="check_out" value="12:00"/>
+        </insert>
+
+        <insert tableName="hotels">
+            <column name="id" value="1"/>
+            <column name="name" value="DoubleTree by Hilton Minsk"/>
+            <column name="description" value="The DoubleTree by Hilton Hotel Minsk offers 193 luxurious rooms in the Belorussian capital and stunning views of Minsk city from the hotel's 20th floor ..."/>
+            <column name="brand" value="Hilton"/>
+            <column name="address_id" value="1"/>
+            <column name="contacts_id" value="1"/>
+            <column name="arrival_time_id" value="1"/>
+        </insert>
+
+        <!-- Insert amenities -->
+        <insert tableName="amenities">
+            <column name="id" value="1"/>
+            <column name="name" value="Free parking"/>
+        </insert>
+        <insert tableName="amenities">
+            <column name="id" value="2"/>
+            <column name="name" value="Free WiFi"/>
+        </insert>
+        <insert tableName="amenities">
+            <column name="id" value="3"/>
+            <column name="name" value="Non-smoking rooms"/>
+        </insert>
+        <insert tableName="amenities">
+            <column name="id" value="4"/>
+            <column name="name" value="Concierge"/>
+        </insert>
+        <insert tableName="amenities">
+            <column name="id" value="5"/>
+            <column name="name" value="On-site restaurant"/>
+        </insert>
+        <insert tableName="amenities">
+            <column name="id" value="6"/>
+            <column name="name" value="Fitness center"/>
+        </insert>
+        <insert tableName="amenities">
+            <column name="id" value="7"/>
+            <column name="name" value="Pet-friendly rooms"/>
+        </insert>
+        <insert tableName="amenities">
+            <column name="id" value="8"/>
+            <column name="name" value="Room service"/>
+        </insert>
+        <insert tableName="amenities">
+            <column name="id" value="9"/>
+            <column name="name" value="Business center"/>
+        </insert>
+        <insert tableName="amenities">
+            <column name="id" value="10"/>
+            <column name="name" value="Meeting rooms"/>
+        </insert>
+
+        <!-- Link hotel with amenities -->
+        <insert tableName="hotel_amenities">
+            <column name="hotel_id" value="1"/>
+            <column name="amenity_id" value="1"/>
+        </insert>
+        <insert tableName="hotel_amenities">
+            <column name="hotel_id" value="1"/>
+            <column name="amenity_id" value="2"/>
+        </insert>
+        <insert tableName="hotel_amenities">
+            <column name="hotel_id" value="1"/>
+            <column name="amenity_id" value="3"/>
+        </insert>
+        <insert tableName="hotel_amenities">
+            <column name="hotel_id" value="1"/>
+            <column name="amenity_id" value="4"/>
+        </insert>
+        <insert tableName="hotel_amenities">
+            <column name="hotel_id" value="1"/>
+            <column name="amenity_id" value="5"/>
+        </insert>
+        <insert tableName="hotel_amenities">
+            <column name="hotel_id" value="1"/>
+            <column name="amenity_id" value="6"/>
+        </insert>
+        <insert tableName="hotel_amenities">
+            <column name="hotel_id" value="1"/>
+            <column name="amenity_id" value="7"/>
+        </insert>
+        <insert tableName="hotel_amenities">
+            <column name="hotel_id" value="1"/>
+            <column name="amenity_id" value="8"/>
+        </insert>
+        <insert tableName="hotel_amenities">
+            <column name="hotel_id" value="1"/>
+            <column name="amenity_id" value="9"/>
+        </insert>
+        <insert tableName="hotel_amenities">
+            <column name="hotel_id" value="1"/>
+            <column name="amenity_id" value="10"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>

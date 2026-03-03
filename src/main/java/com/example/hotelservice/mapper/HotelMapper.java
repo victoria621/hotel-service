@@ -13,20 +13,32 @@ public class HotelMapper {
     public HotelSummaryDto toSummaryDto(HotelEntity entity) {
         if (entity == null) return null;
 
-        String addressString = String.format("%d %s, %s, %s, %s",
-                entity.getAddress().getHouseNumber(),
-                entity.getAddress().getStreet(),
-                entity.getAddress().getCity(),
-                entity.getAddress().getCountry(),
-                entity.getAddress().getPostCode()
-        );
+        String addressString = "Address not available";
+        if (entity.getAddress() != null) {
+            try {
+                addressString = String.format("%d %s, %s, %s, %s",
+                        entity.getAddress().getHouseNumber(),
+                        entity.getAddress().getStreet(),
+                        entity.getAddress().getCity(),
+                        entity.getAddress().getCountry(),
+                        entity.getAddress().getPostCode()
+                );
+            } catch (Exception e) {
+                addressString = "Address error";
+            }
+        }
+
+        String phone = "Phone not available";
+        if (entity.getContacts() != null && entity.getContacts().getPhone() != null) {
+            phone = entity.getContacts().getPhone();
+        }
 
         return new HotelSummaryDto(
                 entity.getId(),
                 entity.getName(),
-                entity.getDescription(),
+                entity.getDescription() != null ? entity.getDescription() : "",
                 addressString,
-                entity.getContacts().getPhone()
+                phone
         );
     }
 
